@@ -31,7 +31,6 @@ env:
   GIT_CLONE: "git clone --depth=1"
 
 jobs:
-
   build_pulseview_mxe:
     name: PulseView MXE build (${{ matrix.target.target }}) (${{ matrix.build_type.type }})
 
@@ -71,9 +70,11 @@ jobs:
           echo "ARTIFACT_VERSION=pr${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       - name: Checkout sigrok-build
+        uses: actions/checkout@v4
+        # for development, we want our own fork
         # Cannot use actions/checkout because it always checks out the calling actions' repo, not the one specified
-        run: |
-          git clone https://github.com/sigrokproject/sigrok-build.git
+        #run: |
+        #  git clone https://github.com/sigrokproject/sigrok-build.git
 
       - name: Build dependencies
         run: |
@@ -142,7 +143,6 @@ jobs:
         if: (github.event_name == 'pull_request')
         run: |
           echo "PR_LINKS=[pulseview-${{ env.ARTIFACT_VERSION }}-${{ matrix.target.target }}-${{ matrix.build_type.name }}-installer.exe](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
-
 
   build_sigrok-cli_mxe:
     name: sigrok-cli MXE build (${{ matrix.target.target }})
@@ -245,7 +245,6 @@ jobs:
         if: (github.event_name == 'pull_request')
         run: |
           echo "PR_LINKS=[sigrok-cli-${{ env.ARTIFACT_VERSION }}-${{ matrix.target.target }}-debug-installer.exe](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
-
 
   build_pulseview_appimage:
     name: PulseView AppImage build (${{ matrix.target.target }}) (${{ matrix.build_type.type }})
@@ -376,7 +375,6 @@ jobs:
         run: |
           echo "PR_LINKS=[pulseview-${{ matrix.target.target }}-${{ matrix.build_type.name }}-appimage](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
 
-
   build_sigrok-cli_appimage:
     name: sigrok-cli AppImage build (${{ matrix.target.target }})
 
@@ -499,7 +497,6 @@ jobs:
         run: |
           echo "PR_LINKS=[sigrok-cli-${{ env.ARTIFACT_VERSION }}-${{ matrix.target.target }}-debug.appimage](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
 
-
   build_pulseview_macos_arm:
     name: PulseView macOS build for ARM
 
@@ -510,12 +507,12 @@ jobs:
     # See https://github.com/actions/runner-images/issues/9254
     runs-on: macos-14
 
-# Note: For now, we only supply debug builds
-#    strategy:
-#      matrix:
-#        build_type:
-#          - { type: "Release", name: "release" }
-#          - { type: "Debug", name: "debug" }
+    # Note: For now, we only supply debug builds
+    #    strategy:
+    #      matrix:
+    #        build_type:
+    #          - { type: "Release", name: "release" }
+    #          - { type: "Debug", name: "debug" }
 
     env:
       TARGET: "arm"
@@ -541,14 +538,17 @@ jobs:
           libzip libusb libftdi hidapi nettle check doxygen swig \
           glib glibmm@2.66 cmake boost sdcc $BREW_PYTHON_VERSION $BREW_QT_VERSION
 
-#      - name: Provide qt also in prefix directory as qt is using a keg
-#        run: |
-#          brew link -f $BREW_QT_VERSION
-
+      #      - name: Provide qt also in prefix directory as qt is using a keg
+      #        run: |
+      #          brew link -f $BREW_QT_VERSION
       - name: Checkout sigrok-build
         # Cannot use actions/checkout because it always checks out the calling actions' repo, not the one specified
-        run: |
-          git clone https://github.com/sigrokproject/sigrok-build.git
+        # temporarily check this out from my repo
+        uses: actions/checkout@v4
+        with:
+          path: sigrok-build
+        #run: |
+        #  git clone https://github.com/sigrokproject/sigrok-build.git
 
       - name: Build dependencies
         run: |
@@ -608,7 +608,6 @@ jobs:
         run: |
           echo "PR_LINKS=[pulseview-${{ env.ARTIFACT_VERSION }}-${{ env.TARGET }}.dmg](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
 
-
   build_pulseview_macos_x86:
     name: PulseView macOS build for x86
 
@@ -618,12 +617,12 @@ jobs:
 
     runs-on: macos-15-intel
 
-# Note: For now, we only supply debug builds
-#    strategy:
-#      matrix:
-#        build_type:
-#          - { type: "Release", name: "release" }
-#          - { type: "Debug", name: "debug" }
+    # Note: For now, we only supply debug builds
+    #    strategy:
+    #      matrix:
+    #        build_type:
+    #          - { type: "Release", name: "release" }
+    #          - { type: "Debug", name: "debug" }
 
     env:
       TARGET: "x86"
@@ -649,9 +648,9 @@ jobs:
           libzip libusb libftdi hidapi nettle check doxygen swig \
           glib glibmm@2.66 cmake boost sdcc $BREW_PYTHON_VERSION $BREW_QT_VERSION
 
-#      - name: Provide qt also in prefix directory as qt is using a keg
-#        run: |
-#          brew link -f $BREW_QT_VERSION
+      #      - name: Provide qt also in prefix directory as qt is using a keg
+      #        run: |
+      #          brew link -f $BREW_QT_VERSION
 
       - name: Checkout sigrok-build
         # Cannot use actions/checkout because it always checks out the calling actions' repo, not the one specified
@@ -715,7 +714,6 @@ jobs:
         if: (github.event_name == 'pull_request')
         run: |
           echo "PR_LINKS=[pulseview-${{ env.ARTIFACT_VERSION }}-${{ env.TARGET }}.dmg](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
-
 
   build_sigrok-cli_macos_arm:
     name: sigrok-cli macOS build for ARM
@@ -809,7 +807,6 @@ jobs:
         run: |
           echo "PR_LINKS=[sigrok-cli-${{ env.ARTIFACT_VERSION }}-${{ env.TARGET }}.dmg](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
 
-
   build_sigrok-cli_macos_x86:
     name: sigrok-cli macOS build for x86
 
@@ -901,7 +898,6 @@ jobs:
         run: |
           echo "PR_LINKS=[sigrok-cli-${{ env.ARTIFACT_VERSION }}-${{ env.TARGET }}.dmg](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_OUTPUT
 
-
   continuous_release_pulseview:
     name: Create continuous PulseView release and add artifacts to it
 
@@ -941,7 +937,6 @@ jobs:
           draft: false
           fail_on_unmatched_files: true
 
-
   continuous_release_sigrok-cli:
     name: Create continuous sigrok-cli release and add artifacts to it
 
@@ -978,7 +973,6 @@ jobs:
           draft: false
           fail_on_unmatched_files: true
 
-
   continuous_release_all:
     name: Create continuous release and add artifacts to it
 
@@ -996,7 +990,6 @@ jobs:
     steps:
       - name: Debug output
         run: echo
-
 
   announce_pv_builds_in_pr:
     name: Announce PV builds in PR
@@ -1033,7 +1026,6 @@ jobs:
               body: process.env.PR_COMMENT
             })
 
-
   announce_sigrok-cli_builds_in_pr:
     name: Announce sigrok-cli builds in PR
 
@@ -1068,7 +1060,6 @@ jobs:
               repo: context.repo.repo,
               body: process.env.PR_COMMENT
             })
-
 
   debug_output:
     name: Debug output
