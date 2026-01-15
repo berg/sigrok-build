@@ -17,7 +17,7 @@ env:
   # Git URL for the libsigrok dependency
   LIBSIGROK_REPO: "https://github.com/sipeed/libsigrok.git"
   # Git branch for the libsigrok dependency
-  LIBSIGROK_BRANCH: "master"
+  LIBSIGROK_BRANCH: "slogic-dev"
   # Git URL for the libsigrokdecode dependency
   LIBSIGROKDECODE_REPO: "git://sigrok.org/libsigrokdecode"
   # Git URL for the sigrok-firmware dependency
