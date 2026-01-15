@@ -114,23 +114,26 @@ rm -rf "$PYTHON_DIR"/lib/python$PYTHON_VERSION/site-packages
 rm -rf "$PYTHON_DIR"/Resources/Python.app
 rm -rf "$PYTHON_DIR"/_CodeSignature
 
-# Replace paths
-install_name_tool -id \
-	"@executable_path/../Frameworks/$DBUS_DYLIB" \
-	"$FRAMEWORKS_DIR/$DBUS_DYLIB"
+if [ "$ARTIFACT_BIN_NAME" = "pulseview" ]; then
+    # Replace paths
+    install_name_tool -id \
+        "@executable_path/../Frameworks/$DBUS_DYLIB" \
+        "$FRAMEWORKS_DIR/$DBUS_DYLIB"
 
-install_name_tool -id \
-	@executable_path/../Frameworks/QtDBus.framework/Versions/A/QtDBus \
-	"$FRAMEWORKS_DIR/QtDBus.framework/Versions/A/QtDBus"
+    install_name_tool -id \
+        @executable_path/../Frameworks/QtDBus.framework/Versions/A/QtDBus \
+        "$FRAMEWORKS_DIR/QtDBus.framework/Versions/A/QtDBus"
 
-install_name_tool -change \
-    "$DBUS_PREFIX/lib/$DBUS_DYLIB" \
-	"@executable_path/../Frameworks/$DBUS_DYLIB" \
-	"$FRAMEWORKS_DIR/QtDBus.framework/Versions/A/QtDBus"
+    install_name_tool -change \
+        "$DBUS_PREFIX/lib/$DBUS_DYLIB" \
+        "@executable_path/../Frameworks/$DBUS_DYLIB" \
+        "$FRAMEWORKS_DIR/QtDBus.framework/Versions/A/QtDBus"
+fi
 
 install_name_tool -id \
 	@executable_path/../Frameworks/Python.framework/Versions/$PYTHON_VERSION/Python \
 	"$PYTHON_DIR"/Python
+
 
 "$QT_BIN_DIR"/macdeployqt $ARTIFACT_TITLE.app -libpath="$QT_DIR/lib"
 
