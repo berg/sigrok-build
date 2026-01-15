@@ -72,6 +72,8 @@ jobs:
 
       - name: Checkout sigrok-build
         uses: actions/checkout@v4
+        with:
+          path: sigrok-build
 
       - name: Build dependencies
         run: |
@@ -538,6 +540,8 @@ jobs:
 
       - name: Checkout sigrok-build
         uses: actions/checkout@v4
+        with:
+          path: sigrok-build
 
       - name: Build dependencies
         run: |
@@ -601,6 +605,7 @@ jobs:
     name: PulseView macOS build for x86
 
     if: |
+      false &&
       ((endsWith(github.repository, 'pulseview')) ||
       (endsWith(github.repository, 'sigrok-build')))
 
@@ -643,6 +648,8 @@ jobs:
 
       - name: Checkout sigrok-build
         uses: actions/checkout@v4
+        with:
+          path: sigrok-build
 
       - name: Build dependencies
         run: |
@@ -738,6 +745,8 @@ jobs:
 
       - name: Checkout sigrok-build
         uses: actions/checkout@v4
+        with:
+          path: sigrok-build
 
       - name: Build dependencies
         run: |
@@ -796,6 +805,7 @@ jobs:
     name: sigrok-cli macOS build for x86
 
     if: |
+      false &&
       ((endsWith(github.repository, 'sigrok-cli')) ||
       (endsWith(github.repository, 'sigrok-build')))
 
@@ -827,6 +837,8 @@ jobs:
 
       - name: Checkout sigrok-build
         uses: actions/checkout@v4
+        with:
+          path: sigrok-build
 
       - name: Build dependencies
         run: |
@@ -1048,6 +1060,8 @@ jobs:
 
   debug_output:
     name: Debug output
+
+    if: false
 
     runs-on: ubuntu-latest
 
