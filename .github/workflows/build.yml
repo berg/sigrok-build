@@ -15,7 +15,7 @@ env:
   # Git URL for the libserialport dependency
   LIBSERIALPORT_REPO: "git://sigrok.org/libserialport"
   # Git URL for the libsigrok dependency
-  LIBSIGROK_REPO: "git://sigrok.org/libsigrok"
+  LIBSIGROK_REPO: "https://github.com/sipeed/libsigrok.git"
   # Git branch for the libsigrok dependency
   LIBSIGROK_BRANCH: "master"
   # Git URL for the libsigrokdecode dependency
@@ -554,7 +554,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           # TODO: Clone from sigrok.org
-          repository: sigrokproject/pulseview
+          repository: sipeed/pulseview
           path: pulseview
 
       - name: Checkout PulseView from PR
@@ -662,7 +662,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           # TODO: Clone from sigrok.org
-          repository: sigrokproject/pulseview
+          repository: sipeed/pulseview
           path: pulseview
 
       - name: Checkout PulseView from PR
